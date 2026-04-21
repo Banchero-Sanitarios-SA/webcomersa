@@ -98,6 +98,45 @@
 
 <body class="stretched">
 
+  <!-- Aviso importante: fraude (popup)
+		============================================= -->
+  <style>
+    #fraud-notice-overlay{position:fixed;inset:0;background:rgba(0,0,0,.82);z-index:99999;display:none;align-items:center;justify-content:center;padding:20px;overflow-y:auto}
+    #fraud-notice-overlay.show{display:flex}
+    #fraud-notice-modal{position:relative;max-width:640px;width:100%;margin:auto}
+    #fraud-notice-modal img{width:100%;height:auto;display:block;border-radius:8px;box-shadow:0 10px 40px rgba(0,0,0,.5)}
+    #fraud-notice-close{position:absolute;top:-14px;right:-14px;width:40px;height:40px;border-radius:50%;background:#fff;border:none;font-size:22px;line-height:1;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.4);color:#0a3c3f;font-weight:700;display:flex;align-items:center;justify-content:center;padding:0}
+    #fraud-notice-close:hover{background:#f2f2f2}
+    @media (max-width:520px){#fraud-notice-close{top:8px;right:8px;width:34px;height:34px;font-size:18px}}
+  </style>
+  <div id="fraud-notice-overlay" role="dialog" aria-modal="true" aria-labelledby="fraud-notice-title">
+    <div id="fraud-notice-modal">
+      <button type="button" id="fraud-notice-close" aria-label="Cerrar aviso">&times;</button>
+      <img id="fraud-notice-title" src="images/comersa_aviso_fraude.jpg" alt="Aviso importante de Comersa: está circulando un correo electrónico y un número de WhatsApp falsos que utilizan indebidamente el nombre de Comersa Distribuidora. No abrir enlaces ni descargar archivos adjuntos. No compartir información personal, bancaria o confidencial. Verificar siempre que el remitente sea un canal oficial. Ante cualquier duda, comunicarse con nosotros por nuestros medios habituales.">
+    </div>
+  </div>
+  <script>
+    (function(){
+      var seen;
+      try { seen = sessionStorage.getItem('fraudNoticeSeen'); } catch(e) { seen = null; }
+      if (seen) return;
+      var overlay = document.getElementById('fraud-notice-overlay');
+      var closeBtn = document.getElementById('fraud-notice-close');
+      var modal = document.getElementById('fraud-notice-modal');
+      function close(){
+        overlay.classList.remove('show');
+        try { sessionStorage.setItem('fraudNoticeSeen','1'); } catch(e) {}
+        document.documentElement.style.overflow = '';
+      }
+      overlay.classList.add('show');
+      document.documentElement.style.overflow = 'hidden';
+      closeBtn.addEventListener('click', close);
+      overlay.addEventListener('click', function(e){ if (!modal.contains(e.target)) close(); });
+      document.addEventListener('keydown', function(e){ if (e.key === 'Escape') close(); });
+    })();
+  </script>
+  <!-- END: Aviso importante -->
+
   <!-- Document Wrapper
 	============================================= -->
   <div id="wrapper">
